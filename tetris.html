@@ -95,12 +95,31 @@
       text-align: center;
     }
 
+    #overlay .subtitle {
+      font-size: clamp(0.75rem, 3vw, 1rem);
+      letter-spacing: 0.15em;
+      color: #ffaaee;
+      text-shadow: 0 0 10px #ff66cc;
+      text-align: center;
+      margin-top: -8px;
+    }
+
     #overlay p {
       color: #ff66cc;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       letter-spacing: 0.08em;
       text-align: center;
       padding: 0 12px;
+    }
+
+    #mascot {
+      filter: drop-shadow(0 0 12px #ff00cc99);
+      animation: mascot-float 2.4s ease-in-out infinite;
+    }
+
+    @keyframes mascot-float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-8px); }
     }
 
     button {
@@ -300,7 +319,33 @@
   <div class="canvas-wrap">
     <canvas id="game-canvas" width="300" height="600"></canvas>
     <div id="overlay">
+      <!-- Maskot — originálna Pokémon-like postavička -->
+      <svg id="mascot" width="110" height="120" viewBox="0 0 110 120" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="85,90 95,70 78,75 90,55 70,65" fill="#ffdd00" stroke="#cc9900" stroke-width="1.5"/>
+        <ellipse cx="50" cy="82" rx="32" ry="28" fill="#ffcc00" stroke="#cc9900" stroke-width="2"/>
+        <ellipse cx="50" cy="52" rx="28" ry="26" fill="#ffcc00" stroke="#cc9900" stroke-width="2"/>
+        <polygon points="28,30 22,4 38,22" fill="#ffcc00" stroke="#cc9900" stroke-width="1.5"/>
+        <polygon points="29,27 25,10 36,23" fill="#1a0020"/>
+        <polygon points="72,30 78,4 62,22" fill="#ffcc00" stroke="#cc9900" stroke-width="1.5"/>
+        <polygon points="71,27 75,10 64,23" fill="#1a0020"/>
+        <ellipse cx="28" cy="60" rx="8" ry="6" fill="#ff00cc" opacity="0.7"/>
+        <ellipse cx="72" cy="60" rx="8" ry="6" fill="#ff00cc" opacity="0.7"/>
+        <ellipse cx="40" cy="50" rx="7" ry="7.5" fill="white"/>
+        <ellipse cx="41" cy="51" rx="4.5" ry="5" fill="#1a0010"/>
+        <ellipse cx="42" cy="49" rx="1.5" ry="1.5" fill="white"/>
+        <ellipse cx="60" cy="50" rx="7" ry="7.5" fill="white"/>
+        <ellipse cx="61" cy="51" rx="4.5" ry="5" fill="#1a0010"/>
+        <ellipse cx="62" cy="49" rx="1.5" ry="1.5" fill="white"/>
+        <ellipse cx="50" cy="59" rx="2.5" ry="1.5" fill="#cc7700"/>
+        <path d="M 40 65 Q 50 73 60 65" stroke="#cc7700" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="20" cy="88" rx="10" ry="8" fill="#ffcc00" stroke="#cc9900" stroke-width="1.5"/>
+        <ellipse cx="80" cy="88" rx="10" ry="8" fill="#ffcc00" stroke="#cc9900" stroke-width="1.5"/>
+        <ellipse cx="38" cy="108" rx="10" ry="7" fill="#ffcc00" stroke="#cc9900" stroke-width="1.5"/>
+        <ellipse cx="62" cy="108" rx="10" ry="7" fill="#ffcc00" stroke="#cc9900" stroke-width="1.5"/>
+        <path d="M 28 78 Q 50 72 72 78" stroke="#cc7700" stroke-width="2.5" fill="none" opacity="0.5"/>
+      </svg>
       <h2>TETRIS</h2>
+      <div class="subtitle">for Bruno &#11088;</div>
       <p>Klávesnica: šípky + medzerník<br>Mobil: tlačidlá nižšie</p>
       <button id="start-btn">START</button>
     </div>
