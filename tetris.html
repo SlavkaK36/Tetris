@@ -144,23 +144,25 @@
       gap: 10px;
       margin: 14px 0 20px;
       width: 100%;
-      max-width: 340px;
+      max-width: 360px;
+      padding: 0 8px;
     }
 
     .btn-row {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       justify-content: center;
+      width: 100%;
     }
 
     .ctrl-btn {
-      width: 70px;
-      height: 70px;
+      width: 72px;
+      height: 72px;
       border-radius: 14px;
       background: linear-gradient(145deg, #2a0035, #1a0020);
       border: 2px solid #8b0057;
       color: #ff66cc;
-      font-size: 1.6rem;
+      font-size: 1.7rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -172,26 +174,37 @@
       padding: 0;
       letter-spacing: 0;
       text-transform: none;
+      flex-shrink: 0;
     }
 
     .ctrl-btn:active, .ctrl-btn.pressed {
       background: linear-gradient(145deg, #cc0099, #8b0057);
       box-shadow: 0 0 20px #ff00ccaa;
-      transform: scale(0.93);
+      transform: scale(0.92);
+    }
+
+    /* Veľké tlačidlo rotácie — stred, výrazné */
+    .ctrl-btn.rotate-btn {
+      width: 96px;
+      height: 96px;
+      font-size: 2.2rem;
+      border-color: #ff00cc;
+      box-shadow: 0 0 20px #ff00cc55, inset 0 0 12px #3a0045;
+      color: #ff00ff;
     }
 
     .ctrl-btn.drop-btn {
-      width: 152px;
-      font-size: 1rem;
-      letter-spacing: 0.1em;
-      height: 58px;
+      flex: 1;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      height: 56px;
     }
 
     .ctrl-btn.pause-btn {
-      width: 90px;
-      font-size: 0.85rem;
-      letter-spacing: 0.1em;
-      height: 58px;
+      width: 80px;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      height: 56px;
     }
 
     /* ── Mobile layout ── */
@@ -308,17 +321,17 @@
 
 <!-- Touch controls (mobile) -->
 <div id="touch-controls">
-  <div class="btn-row">
-    <button class="ctrl-btn" id="btn-rotate">↻</button>
-  </div>
+  <!-- Riadok 1: pohyb + rotácia v strede -->
   <div class="btn-row">
     <button class="ctrl-btn" id="btn-left">←</button>
-    <button class="ctrl-btn" id="btn-down">↓</button>
+    <button class="ctrl-btn rotate-btn" id="btn-rotate">↻</button>
     <button class="ctrl-btn" id="btn-right">→</button>
   </div>
+  <!-- Riadok 2: soft drop + hard drop + pauza -->
   <div class="btn-row">
+    <button class="ctrl-btn" id="btn-down">↓</button>
     <button class="ctrl-btn drop-btn" id="btn-drop">⬇ DROP</button>
-    <button class="ctrl-btn pause-btn" id="btn-pause">⏸ PAUSE</button>
+    <button class="ctrl-btn pause-btn" id="btn-pause">⏸</button>
   </div>
 </div>
 
