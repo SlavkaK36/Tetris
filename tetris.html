@@ -160,8 +160,8 @@
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
-      margin: 14px 0 20px;
+      gap: 8px;
+      margin: 8px 0 12px;
       width: 100%;
       max-width: 360px;
       padding: 0 8px;
@@ -175,9 +175,9 @@
     }
 
     .ctrl-btn {
-      width: 72px;
-      height: 72px;
-      border-radius: 14px;
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
       background: linear-gradient(145deg, #2a0035, #1a0020);
       border: 2px solid #8b0057;
       color: #ff66cc;
@@ -204,9 +204,9 @@
 
     /* Veľké tlačidlo rotácie — stred, výrazné */
     .ctrl-btn.rotate-btn {
-      width: 96px;
-      height: 96px;
-      font-size: 2.2rem;
+      width: 72px;
+      height: 72px;
+      font-size: 1.9rem;
       border-color: #ff00cc;
       box-shadow: 0 0 20px #ff00cc55, inset 0 0 12px #3a0045;
       color: #ff00ff;
@@ -214,16 +214,16 @@
 
     .ctrl-btn.drop-btn {
       flex: 1;
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      height: 56px;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      height: 46px;
     }
 
     .ctrl-btn.pause-btn {
-      width: 80px;
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      height: 56px;
+      width: 64px;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      height: 46px;
     }
 
     /* ── Mobile layout ── */
@@ -238,6 +238,10 @@
 
       /* Na mobile skry bočné panely a kontroly panel */
       .left-panel, .controls-panel { display: none; }
+
+      /* Kompaktné okraje */
+      h1 { margin: 4px 0 4px; font-size: 1.1rem; letter-spacing: 0.2em; }
+      #touch-controls { gap: 6px; margin: 6px 0 8px; }
 
       /* Kompaktný HUD nad plátnom */
       #mobile-hud {
@@ -381,7 +385,8 @@
 </div>
 
 <script>
-const COLS = 10, ROWS = 20, BLOCK = 30;
+const COLS = 10, ROWS = 20;
+let blockSize = 30;
 
 const COLORS = [
   null,
@@ -414,6 +419,25 @@ let board, piece, pieceX, pieceY, nextPiece;
 let score, level, lines;
 let dropTimer, dropInterval;
 let gameRunning = false, paused = false;
+
+// ── Dynamická veľkosť blokov podľa obrazovky ─────────────────────────────
+function initSize() {
+  const mobile = window.innerWidth <= 650;
+  if (mobile) {
+    // Plátno zaberá 63% výšky — optimalizované pre iPhone 15 Pro / 17 Pro
+    const byH = Math.floor(window.innerHeight * 0.63 / ROWS);
+    // Plátno sa musí zmestiť na šírku
+    const byW = Math.floor((window.innerWidth - 16) / COLS);
+    blockSize = Math.max(16, Math.min(byH, byW, 28));
+  } else {
+    blockSize = 30;
+  }
+  canvas.width  = blockSize * COLS;
+  canvas.height = blockSize * ROWS;
+}
+
+window.addEventListener('resize', () => { initSize(); if (gameRunning && !paused) draw(); });
+initSize();
 
 function newBoard() { return Array.from({length: ROWS}, () => new Array(COLS).fill(0)); }
 function randomPiece() { const id = Math.ceil(Math.random()*7); return PIECES[id].map(r=>[...r]); }
@@ -483,7 +507,7 @@ function doRotate() {
 
 function ghostY() { let gy=pieceY; while(!collides(board,piece,pieceX,gy+1))gy++; return gy; }
 
-function drawBlock(context,c,r,color,size=BLOCK) {
+function drawBlock(context,c,r,color,size=blockSize) {
   const x=c*size,y=r*size;
   context.fillStyle=color; context.fillRect(x+1,y+1,size-2,size-2);
   context.fillStyle='rgba(255,255,255,0.18)';
@@ -495,14 +519,14 @@ function drawBlock(context,c,r,color,size=BLOCK) {
 function draw() {
   ctx.fillStyle='#0a000f'; ctx.fillRect(0,0,canvas.width,canvas.height);
   ctx.strokeStyle='#2a0030'; ctx.lineWidth=0.5;
-  for(let r=0;r<=ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*BLOCK);ctx.lineTo(COLS*BLOCK,r*BLOCK);ctx.stroke();}
-  for(let c=0;c<=COLS;c++){ctx.beginPath();ctx.moveTo(c*BLOCK,0);ctx.lineTo(c*BLOCK,ROWS*BLOCK);ctx.stroke();}
+  for(let r=0;r<=ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*blockSize);ctx.lineTo(COLS*blockSize,r*blockSize);ctx.stroke();}
+  for(let c=0;c<=COLS;c++){ctx.beginPath();ctx.moveTo(c*blockSize,0);ctx.lineTo(c*blockSize,ROWS*blockSize);ctx.stroke();}
   for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) if(board[r][c]) drawBlock(ctx,c,r,COLORS[board[r][c]]);
   const gy=ghostY();
   if(gy!==pieceY) for(let r=0;r<piece.length;r++) for(let c=0;c<piece[r].length;c++) if(piece[r][c]){
-    ctx.fillStyle=GHOST_COLOR; ctx.fillRect((pieceX+c)*BLOCK+1,(gy+r)*BLOCK+1,BLOCK-2,BLOCK-2);
+    ctx.fillStyle=GHOST_COLOR; ctx.fillRect((pieceX+c)*blockSize+1,(gy+r)*blockSize+1,blockSize-2,blockSize-2);
     ctx.strokeStyle='rgba(255,0,255,0.3)'; ctx.lineWidth=1;
-    ctx.strokeRect((pieceX+c)*BLOCK+1.5,(gy+r)*BLOCK+1.5,BLOCK-3,BLOCK-3);
+    ctx.strokeRect((pieceX+c)*blockSize+1.5,(gy+r)*blockSize+1.5,blockSize-3,blockSize-3);
   }
   for(let r=0;r<piece.length;r++) for(let c=0;c<piece[r].length;c++)
     if(piece[r][c]) drawBlock(ctx,pieceX+c,pieceY+r,COLORS[piece[r][c]]);
