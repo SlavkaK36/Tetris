@@ -424,11 +424,12 @@ let gameRunning = false, paused = false;
 function initSize() {
   const mobile = window.innerWidth <= 650;
   if (mobile) {
-    // Plátno zaberá 63% výšky — optimalizované pre iPhone 15 Pro / 17 Pro
-    const byH = Math.floor(window.innerHeight * 0.63 / ROWS);
-    // Plátno sa musí zmestiť na šírku
+    // visualViewport.height = presná viditeľná plocha (vylučuje Safari toolbar + tab bar)
+    const vh = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+    // Plátno zaberá 58% viditeľnej výšky — zvyšok pre HUD, title, 2 riadky ovládačov
+    const byH = Math.floor(vh * 0.58 / ROWS);
     const byW = Math.floor((window.innerWidth - 16) / COLS);
-    blockSize = Math.max(16, Math.min(byH, byW, 28));
+    blockSize = Math.max(14, Math.min(byH, byW, 28));
   } else {
     blockSize = 30;
   }
@@ -437,6 +438,9 @@ function initSize() {
 }
 
 window.addEventListener('resize', () => { initSize(); if (gameRunning && !paused) draw(); });
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', () => { initSize(); if (gameRunning && !paused) draw(); });
+}
 initSize();
 
 function newBoard() { return Array.from({length: ROWS}, () => new Array(COLS).fill(0)); }
